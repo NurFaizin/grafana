@@ -12,6 +12,7 @@ import { DashboardModel } from 'app/features/dashboard/state';
 
 import { getTimeSrv } from '../../features/dashboard/services/TimeSrv';
 import { getDatasourceSrv } from '../../features/plugins/datasource_srv';
+import { KioskMode } from '../../types/dashboard';
 import {
   RemovePanelEvent,
   ShiftTimeEvent,
@@ -166,6 +167,12 @@ export class KeybindingSrv {
   }
 
   bind(keyArg: string | string[], fn: () => void) {
+    // Prevent keybindings on kiosk web mode
+    const { kioskMode } = this.chromeService.state.getValue();
+    if (kioskMode === KioskMode.Web) {
+      return;
+    }
+
     Mousetrap.bind(
       keyArg,
       (evt) => {
@@ -179,6 +186,12 @@ export class KeybindingSrv {
   }
 
   bindGlobal(keyArg: string, fn: () => void) {
+    // Prevent keybindings on kiosk web mode
+    const { kioskMode } = this.chromeService.state.getValue();
+    if (kioskMode === KioskMode.Web) {
+      return;
+    }
+
     Mousetrap.bindGlobal(
       keyArg,
       (evt) => {

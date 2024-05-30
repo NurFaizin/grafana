@@ -8,6 +8,7 @@ import { ErrorBoundaryAlert, GlobalStyles, ModalRoot, ModalsProvider, PortalCont
 import { SearchWrapper } from 'app/features/search';
 import { getAppRoutes } from 'app/routes/routes';
 import { store } from 'app/store/store';
+import { KioskMode } from 'app/types';
 
 import { AngularRoot } from './angular/AngularRoot';
 import { loadAndInitAngularIfEnabled } from './angular/loadAndInitAngularIfEnabled';
@@ -17,6 +18,7 @@ import { AppNotificationList } from './core/components/AppNotifications/AppNotif
 import { NavBar } from './core/components/NavBar/NavBar';
 import { GrafanaContext } from './core/context/GrafanaContext';
 import { GrafanaRoute } from './core/navigation/GrafanaRoute';
+import { getKioskMode } from './core/navigation/kiosk';
 import { RouteDescriptor } from './core/navigation/types';
 import { contextSrv } from './core/services/context_srv';
 import { ThemeProvider } from './core/utils/ConfigProvider';
@@ -92,7 +94,8 @@ export class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState
 
   commandPaletteEnabled() {
     const isLoginPage = locationService.getLocation().pathname === '/login';
-    return config.featureToggles.commandPalette && !config.isPublicDashboardView && !isLoginPage;
+    const isKioskWeb = getKioskMode(locationService.getSearchObject()) === KioskMode.Web;
+    return config.featureToggles.commandPalette && !config.isPublicDashboardView && !isLoginPage && !isKioskWeb;
   }
 
   searchBarEnabled() {
