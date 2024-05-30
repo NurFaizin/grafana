@@ -11,6 +11,8 @@ export function getKioskMode(queryParams: UrlQueryMap): KioskMode | null {
     case '1':
     case true:
       return KioskMode.Full;
+    case 'web':
+      return KioskMode.Web;
     default:
       return null;
   }
